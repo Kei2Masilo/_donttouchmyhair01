@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You</title>
+    <style>
+        body {
+            background: url('Rose pic.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #ffcc99; /* Dark peach color text */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        #thankYouMessage {
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #ffcc99; /* Dark peach color */
+            color: black;
+            cursor: pointer;
+            margin-top: 10px;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+        }
+
+        button a {
+            color: black;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="thankYouMessage">
+        <h2>Dear [Username],</h2>
+        <p>Thank you for booking your appointment with us! We appreciate your trust in our services.</p>
+        <p><strong>Appointment Details:</strong></p>
+        <p>- Appointment Number: [Appointment Number]</p>
+        <p>- Date: [Appointment Date]</p>
+        <p>- Time: [Appointment Time]</p>
+        <p>- Deposit Amount: R[Deposit Amount]</p>
+        <p>We look forward to providing you with an excellent experience. If you have any questions or need further assistance, feel free to reach out.</p>
+        <p>Best regards,<br>[Your Business Name/Your Name]</p>
+    </div>
+
+    <button><a href="index.html">Home</a></button>
+
+     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Retrieve values from sessionStorage
+            var username = sessionStorage.getItem('username');
+            var phoneNumber = sessionStorage.getItem('phoneNumber');
+            var appointmentTime = sessionStorage.getItem('appointmentTime');
+            var reference = sessionStorage.getItem('orderNo');
+            var deposit = sessionStorage.getItem('deposit')
+
+            // Display values in the confirmation message
+            document.getElementById("thankYouMessage").innerHTML = `
+                <h2>Dear ${username},</h2>
+                <p>Thank you for booking your appointment with us!</p>
+                <p><strong>Appointment Details: ${reference}</strong></p>
+                <p>- Phone Number: ${phoneNumber}</p>
+                <p>- Appointment Time: ${appointmentTime}</p>
+                <p>- Deposit Amount: R : ${deposit}</p>
+                <p>We look forward to providing you with an excellent experience.</p>
+            
+            `;
+        });
+    </script>
+</body>
+
+</html>

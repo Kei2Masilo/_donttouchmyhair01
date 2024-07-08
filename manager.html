@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            background-image: url('Rose pic.png'); /* Set the image as background for the body */
+            background-size: cover; /* Cover entire background */
+            background-position: center; /* Center the background image */
+            backdrop-filter: blur(8px); /* Blur effect */
+            color: #e1ad21; /* Mustard color */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column; /* Stack elements vertically */
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .login-section {
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent dark background */
+            border: 5px solid #ffcc99; /* Dark peach color border */
+            border-radius: 10px; /* Rounded corners */
+            padding: 20px;
+            max-width: 400px;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+            position: relative; /* Ensure relative positioning for absolute popup */
+        }
+
+        .login-section h2 {
+            color: #ffcc99; /* Dark peach color text */
+        }
+
+        .login-section form {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .login-section label, .login-section select {
+            display: block;
+            margin-bottom: 10px;
+            color: #ffcc99; /* Dark peach color text */
+        }
+
+        .login-section input, .login-section select {
+            width: calc(100% - 22px); /* Adjust for padding */
+            padding: 10px;
+            margin: 5px 0;
+            font-size: 16px;
+            border: 1px solid #ffcc99; /* Dark peach color border */
+            background-color: rgba(0, 0, 0, 0.5); /* Dark background with transparency */
+            color: #ffcc99; /* Dark peach color text */
+            border-radius: 5px;
+        }
+
+        .login-section input[type="submit"] {
+            width: 100%; /* Full width button */
+            background-color: #ffcc99; /* Dark peach color */
+            color: black;
+            cursor: pointer;
+            border: none;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Login section -->
+    <div class="login-section">
+        <h2>Login</h2>
+        <form id="loginForm" action="booking_list.html" method="post">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <input type="submit" value="Login">
+        </form>
+    </div>
+
+    <script>
+        // Form submission handling
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            // Get values from form
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+
+            // Here you can add logic to validate credentials if needed
+
+            // Redirect to Booking List Page
+            window.location.href = "booking_list.html";
+        });
+    </script>
+</body>
+
+</html>

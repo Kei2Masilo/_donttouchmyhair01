@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Page</title>
+    <style>
+        body {
+            background-image: url('Rose pic.png'); /* Set the image as background for the body */
+            background-size: cover; /* Cover entire background */
+            background-position: center; /* Center the background image */
+            backdrop-filter: blur(8px); /* Blur effect */
+            color: black;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            background-color: #000000; /* Dark background color for the header */
+            padding: 1em;
+            width: 100%;
+            /* Take full width */
+            box-sizing: border-box;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: rgba(0, 0, 0, 0.5); /* Transparent black */
+            color: beige; /* Beige text color */
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border: 1px solid #ccc; /* Light grey border */
+        }
+
+        th {
+            background-color: #ccc; /* Light grey background for headers */
+            color: black;
+        }
+
+        td {
+            background-color: transparent; /* Transparent background for cells */
+        }
+
+        p {
+            color: #e1ad21; /* Mustard color */
+        }
+
+        /* Style for the checkbox */
+        .serviceCheckbox {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background-color: transparent; /* Transparent background */
+            border: 2px solid black; /* Black border */
+            border-radius: 3px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        /* Style for the tick mark */
+        .serviceCheckbox:checked::after {
+            content: "\2713"; /* Unicode for check mark symbol */
+            font-size: 16px;
+            color: black; /* Black color for tick mark */
+            position: relative;
+            top: -4px;
+            left: 2px;
+        }
+
+        button {
+            width: 106px; /* Set button width */
+            background-color: black; /* Black button background color */
+            color: beige; /* Beige button text color */
+            cursor: pointer;
+            height: 45px; /* Set button height */
+            border: none; /* No border */
+            margin: 0 5px; /* Set margin between buttons */
+            display: flex;
+            justify-content: center; /* Center the text horizontally */
+            align-items: center; /* Center the text vertically */
+            text-decoration: none; /* Remove underline */
+        }
+
+        button a {
+            text-decoration: none; /* Remove underline */
+            color: beige; /* Beige text color */
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Manager Page</h1>
+    </header>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Customer Nr</th>
+                <th>Customer Name</th>
+                <th>Phone Nr</th>
+                <th>Date</th>
+                <th>Reference Nr</th>
+                <th>Paid</th>
+                <th>Remaining Balance</th>
+            </tr>
+        </thead>
+        <tbody id="bookingList">
+            <!-- Table rows will be dynamically added here -->
+        </tbody>
+    </table>
+    <button><a href="index.html">Home</a></button>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Retrieve values from sessionStorage
+            var appointments = sessionStorage.getItem('appointments');
+            appointments = appointments ? parseInt(appointments) : 0; // Initialize to 0 if not set
+            var totalAmount = parseFloat(sessionStorage.getItem('totalAmount')); // Assuming total amount is stored in sessionStorage
+            var deposit = totalAmount * 0.2; // Calculate deposit
+
+            // Increment appointments count and store it
+            appointments++;
+            sessionStorage.setItem('appointments', appointments);
+
+            // Create a table row with the retrieved data
+            var tableRow = "<tr>" +
+                "<td>" + appointments + "</td>" + // Customer Nr
+                "<td>" + sessionStorage.getItem('username') + "</td>" + // Customer Name
+                "<td>" + sessionStorage.getItem('phoneNumber') + "</td>" + // Phone Nr
+                "<td>" + sessionStorage.getItem('appointmentTime') + "</td>" + // Date
+                "<td>" + sessionStorage.getItem('orderNo') + "</td>"; // Reference Nr
+
+            // Append remaining cells to the table row
+            tableRow += "<td><input type='checkbox' class='serviceCheckbox'></td>" + // Paid checkbox
+                "<td class='remainingBalance'>" + totalAmount.toFixed(2) + "</td>" + // Remaining Balance initially set to total amount
+                "</tr>";
+
+            // Append the table row to the table body
+            document.getElementById("bookingList").innerHTML += tableRow;
+
+            // Add event listener to the Paid checkbox
+            var paidCheckboxes = document.querySelectorAll('.serviceCheckbox');
+            paidCheckboxes.forEach(function (checkbox) {
+                checkbox.addEventListener('change', function () {
+                    var remainingBalanceCell = this.parentElement.nextElementSibling;
+                    var remainingBalance = parseFloat(remainingBalanceCell.textContent);
+                    if (this.checked) {
+                        remainingBalance -= deposit; // Subtract deposit from remaining balance
+                    } else {
+                        remainingBalance += deposit; // Add deposit back to remaining balance
+                    }
+                    remainingBalanceCell.innerText = remainingBalance.toFixed(2);
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

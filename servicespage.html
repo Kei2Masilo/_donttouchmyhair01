@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services Page</title>
+    <style>
+        body {
+            background: url('Rose pic.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #ffcc99; /* Dark peach color text */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-around;
+            width: 80%;
+            max-width: 1200px;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .left-section, .right-section {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .left-section {
+            border-right: 1px solid #ffcc99; /* Dark peach color border */
+        }
+
+        .right-section {
+            padding-left: 20px; /* Add some spacing between sections */
+        }
+
+        #services {
+            margin-top: 20px;
+        }
+
+        #services label {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        #services label input[type="checkbox"] {
+            margin-right: 10px;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background-color: black;
+            border: 2px solid #ffcc99; /* Dark peach color border */
+            border-radius: 50%; /* Make checkbox round */
+            cursor: pointer;
+            outline: none;
+            position: relative; /* Ensure the pseudo-element is positioned relative to the checkbox */
+        }
+
+        #services label input[type="checkbox"]:checked::after {
+            content: '\2714';
+            width: 10px;
+            height: 10px;
+            background-color: #ffcc99; /* Dark peach color */
+            position: absolute;
+            top: 50%; /* Position the center vertically */
+            left: 50%; /* Position the center horizontally */
+            transform: translate(-50%, -50%) rotate(45deg); /* Rotate to resemble a flower shape */
+            border-radius: 2px;
+        }
+
+        .info-section {
+            margin-top: 20px;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .info-section p {
+            margin: 10px 0;
+            color: #ffcc99; /* Dark peach color text */
+        }
+
+        input[type="submit"], input[type="button"] {
+            background-color: #ffcc99; /* Dark peach color */
+            color: black;
+            cursor: pointer;
+            margin-top: 10px;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+        }
+
+        input[type="submit"]:hover, input[type="button"]:hover {
+            background-color: #e1ad21; /* Dark peach color on hover */
+        }
+    </style>
+</head>
+
+<body>
+    <h1 style="color:rgb(60, 60, 60);;">Appointment Information</h2>
+    <div class="info-section">
+        <p id="appointmentNumber"></p>
+        <p id="deposit"></p>
+        <p id="totalAmount"></p>
+    </div>
+
+    <div class="container">
+        <div class="left-section">
+            <h3>Braids</h3>
+            <div id="braids-services">
+                <label><input type="checkbox" name="service" value="braids"> Braids - R180</label>
+                <label><input type="checkbox" name="service" value="haircut"> Haircut - R50</label>
+                <label><input type="checkbox" name="service" value="washhair"> Wash Hair - R30</label>
+            </div>
+        </div>
+        <div class="right-section">
+            <h3>Hair Oil Products</h3>
+            <div id="hair-oil-services">
+                <label><input type="checkbox" name="service" value="hairOil1"> Hair Oil 1 - R80</label>
+                <label><input type="checkbox" name="service" value="hairOil2"> Hair Oil 2 - R100</label>
+                <label><input type="checkbox" name="service" value="hairOil3"> Hair Oil 3 - R120</label>
+            </div>
+        </div>
+    </div>
+
+    <form id="servicesForm" action="confirmation.html" method="get">
+        <input type="button" value="Calculate Deposit" onclick="calculateDeposit()">
+        <input type="submit" value="Confirmation" onclick="submitData()">
+    </form>
+
+    <script>
+        function calculateDeposit() {
+            // Calculate deposit
+            var services = document.getElementsByName("service");
+            var totalPrize = 0;
+
+            for (var i = 0; i < services.length; i++) {
+                if (services[i].checked) {
+                    switch (services[i].value) {
+                        case "braids":
+                            totalPrize += 180;
+                            break;
+                        case "haircut":
+                            totalPrize += 50;
+                            break;
+                        case "washhair":
+                            totalPrize += 30;
+                            break;
+                        case "hairOil1":
+                            totalPrize += 80;
+                            break;
+                        case "hairOil2":
+                            totalPrize += 100;
+                            break;
+                        case "hairOil3":
+                            totalPrize += 120;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+
+            var deposit = totalPrize * 0.2;
+
+            // Display deposit
+            document.getElementById("deposit").innerText = "Total Deposit: R" + deposit.toFixed(2);
+            sessionStorage.setItem('deposit', deposit.toFixed(2));
+
+            // Display total amount
+            document.getElementById("totalAmount").innerText = "Total Amount: R" + totalPrize.toFixed(2);
+            sessionStorage.setItem('totalAmount', totalPrize.toFixed(2));
+
+            // Generate and display appointment number
+            var appointmentNumber = generateAppointmentNumber();
+            document.getElementById("appointmentNumber").innerText = "Appointment Number: " + appointmentNumber;
+        }
+
+        function submitData() {
+            // Redirect to Confirmation Page
+            window.location.href = "confirmation.html";
+        }
+
+        function generateAppointmentNumber() {
+            var currentDate = new Date();
+            var day = currentDate.getDate();
+            var month = currentDate.getMonth() + 1; // Month is zero-based
+            var year = currentDate.getFullYear();
+
+            var formattedDate = year + "-" + month + "-" + day;
+
+            // Use the date to generate a unique number
+            var appointmentNumber = formattedDate.replace(/-/g, "") + Math.floor(Math.random() * 10000);
+
+            return appointmentNumber;
+        }
+
+        var orderNo = generateAppointmentNumber();
+        sessionStorage.setItem('orderNo', orderNo);
+
+    </script>
+
+</body>
+
+</html>

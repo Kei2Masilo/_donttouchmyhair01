@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <style>
+        /* Set the background and basic styling for the body */
+        body {
+            background-color: #FAEBD7; /* Light beige/cream color */
+            color: black;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            justify-content: center; /* Center content vertically */
+        }
+
+        /* Flex container to hold the image and buttons side by side */
+        .flex-container {
+            display: flex;
+            justify-content: center; /* Center content horizontally */
+            align-items: center; /* Center content vertically */
+            gap: 20px; /* Space between items */
+        }
+
+        /* Style the image */
+        .flex-container img {
+            width: 50%; /* Set the width of the image to 50% of its container */
+            max-width: 350px; /* Set the maximum width for the image */
+            height: auto; /* Maintain aspect ratio */
+        }
+
+        /* Style the buttons */
+        button {
+            width: 106px; /* Set button width */
+            background-color: black; /* Set button background color */
+            color: beige; /* Set button text color */
+            cursor: pointer;
+            height: 45px; /* Set button height */
+            border: 1px solid beige; /* Set button border */
+            margin: 0 5px; /* Set margin between buttons */
+            display: flex;
+            justify-content: center; /* Center the text horizontally */
+            align-items: center; /* Center the text vertically */
+        }
+
+        /* Style the links inside the buttons */
+        button a {
+            text-decoration: none; /* Remove underline from links */
+            color: beige; /* Set link text color */
+            display: flex;
+            justify-content: center; /* Center the text horizontally */
+            align-items: center; /* Center the text vertically */
+            width: 100%; /* Make the link take the full width of the button */
+            height: 100%; /* Make the link take the full height of the button */
+        }
+
+        /* Change button color on hover */
+        button:hover {
+            background-color: darkgray;
+        }
+
+        .social-icons {
+            display: flex;
+            flex-direction: column; /* Arrange icons vertically */
+            align-items: center; /* Center icons horizontally */
+            gap: 20px; /* Space between icons */
+            margin-top: 20px; /* Space above the icons */
+        }
+
+        .social-icons a img {
+            width: 30px; /* Reduced size */
+            height: 30px; /* Reduced size */
+            border-radius: 50%; /* Curved edges */
+            transition: transform 0.3s;
+        }
+
+        .social-icons a img:hover {
+            transform: scale(1.1); /* Slightly enlarge icon on hover */
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Flex container to hold the image and buttons side by side -->
+    <div class="flex-container">
+        <!-- Image section -->
+        <img src="Logo picture.jpeg" alt="Logo Picture">
+
+        <!-- Section containing the buttons -->
+        <div>
+            <button><a href="homepage.html">Customer</a></button>
+            <button><a href="manager.html">Manager</a></button>
+
+            <!-- Section containing the social media icons -->
+            <div class="social-icons">
+                <a href="https://www.facebook.com/yourfacebookpage" target="_blank">
+                    <img src="facebook icon.png" alt="Facebook">
+                </a>
+                <a href="https://www.instagram.com/yourinstagramhandle" target="_blank">
+                    <img src="instagram icon.png" alt="Instagram">
+                </a>
+                <a href="https://wa.me/yourphonenumber" target="_blank">
+                    <img src="whatsapps icon.png" alt="WhatsApp">
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
