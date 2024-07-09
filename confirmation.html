@@ -70,7 +70,7 @@
             var deposit = sessionStorage.getItem('deposit')
 
             // Display values in the confirmation message
-            document.getElementById("thankYouMessage").innerHTML = `
+            document.getElementById("thankYouMessage").innerHTML = 
                 <h2>Dear ${username},</h2>
                 <p>Thank you for booking your appointment with us!</p>
                 <p><strong>Appointment Details: ${reference}</strong></p>
@@ -79,9 +79,7 @@
                 <p>- Deposit Amount: R : ${deposit}</p>
                 <p>We look forward to providing you with an excellent experience.</p>
             
-            `;
+            ;
         });
     </script>
 </body>
-
-</html>
