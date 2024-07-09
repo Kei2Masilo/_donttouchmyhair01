@@ -111,6 +111,66 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Set the minimum date to today's date
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('appointmentDate').setAttribute('min', today);
+        });
+
+        // IndexedDB setup
+        let db;
+        const request = indexedDB.open('appointmentDB', 1);
+
+        request.onerror = (event) => {
+            console.error('Database error:', event.target.errorCode);
+        };
+
+        request.onsuccess = (event) => {
+            db = event.target.result;
+            console.log('Database opened successfully');
+        };
+
+        request.onupgradeneeded = (event) => {
+            db = event.target.result;
+            const objectStore = db.createObjectStore('appointments', { keyPath: 'id', autoIncrement: true });
+            objectStore.createIndex('username', 'username', { unique: false });
+            objectStore.createIndex('phoneNumber', 'phoneNumber', { unique: false });
+            objectStore.createIndex('appointmentDate', 'appointmentDate', { unique: false });
+            objectStore.createIndex('appointmentTime', 'appointmentTime', { unique: false });
+            objectStore.createIndex('deposit', 'deposit', { unique: false });
+        };
+
+        // Handle form submission
+        document.getElementById('appointmentForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const appointmentDate = document.getElementById('appointmentDate').value;
+            const appointmentTime = document.getElementById('appointmentTime').value;
+            const deposit = 100; // Assuming a fixed deposit amount of 100 for demonstration purposes
+
+            const transaction = db.transaction(['appointments'], 'readwrite');
+            const objectStore = transaction.objectStore('appointments');
+            const request = objectStore.add({ username, phoneNumber, appointmentDate, appointmentTime, deposit });
+
+            request.onsuccess = (event) => {
+                console.log('Appointment added to the database');
+                sessionStorage.setItem('username', username);
+                sessionStorage.setItem('phoneNumber', phoneNumber);
+                sessionStorage.setItem('appointmentDate', appointmentDate);
+                sessionStorage.setItem('appointmentTime', appointmentTime);
+                sessionStorage.setItem('deposit', deposit);
+                window.location.href = 'thank_you.html';
+            };
+
+            request.onerror = (event) => {
+                console.error('Error adding appointment:', event.target.errorCode);
+            };
+        });
+    </script>
 </body>
 
 </html>
