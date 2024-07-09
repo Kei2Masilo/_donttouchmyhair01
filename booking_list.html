@@ -7,10 +7,10 @@
     <title>Manager Page</title>
     <style>
         body {
-            background-image: url('Rose pic.png'); /* Set the image as background for the body */
-            background-size: cover; /* Cover entire background */
-            background-position: center; /* Center the background image */
-            backdrop-filter: blur(8px); /* Blur effect */
+            background-image: url('Rose pic.png');
+            background-size: cover;
+            background-position: center;
+            backdrop-filter: blur(8px);
             color: black;
             font-family: Arial, sans-serif;
             margin: 0;
@@ -23,10 +23,9 @@
 
         header {
             text-align: center;
-            background-color: #000000; /* Dark background color for the header */
+            background-color: #000000;
             padding: 1em;
             width: 100%;
-            /* Take full width */
             box-sizing: border-box;
         }
 
@@ -38,68 +37,61 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
-            background-color: rgba(0, 0, 0, 0.5); /* Transparent black */
-            color: beige; /* Beige text color */
+            background-color: rgba(0, 0, 0, 0.5);
+            color: beige;
         }
 
-        th,
-        td {
+        th, td {
             padding: 10px;
-            border: 1px solid #ccc; /* Light grey border */
+            border: 1px solid #ccc;
         }
 
         th {
-            background-color: #ccc; /* Light grey background for headers */
+            background-color: #ccc;
             color: black;
         }
 
         td {
-            background-color: transparent; /* Transparent background for cells */
+            background-color: transparent;
         }
 
-        p {
-            color: #e1ad21; /* Mustard color */
-        }
-
-        /* Style for the checkbox */
         .serviceCheckbox {
             appearance: none;
             width: 20px;
             height: 20px;
-            background-color: transparent; /* Transparent background */
-            border: 2px solid black; /* Black border */
+            background-color: transparent;
+            border: 2px solid black;
             border-radius: 3px;
             cursor: pointer;
             outline: none;
         }
 
-        /* Style for the tick mark */
         .serviceCheckbox:checked::after {
-            content: "\2713"; /* Unicode for check mark symbol */
+            content: "\2713";
             font-size: 16px;
-            color: black; /* Black color for tick mark */
+            color: black;
             position: relative;
             top: -4px;
             left: 2px;
         }
 
         button {
-            width: 106px; /* Set button width */
-            background-color: black; /* Black button background color */
-            color: beige; /* Beige button text color */
+            width: 106px;
+            background-color: black;
+            color: beige;
             cursor: pointer;
-            height: 45px; /* Set button height */
-            border: none; /* No border */
-            margin: 0 5px; /* Set margin between buttons */
+            height: 45px;
+            border: none;
+            margin: 0 5px;
             display: flex;
-            justify-content: center; /* Center the text horizontally */
-            align-items: center; /* Center the text vertically */
-            text-decoration: none; /* Remove underline */
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
         }
 
         button a {
-            text-decoration: none; /* Remove underline */
-            color: beige; /* Beige text color */
+            text-decoration: none;
+            color: beige;
         }
     </style>
 </head>
@@ -129,46 +121,61 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // Retrieve values from sessionStorage
-            var appointments = sessionStorage.getItem('appointments');
-            appointments = appointments ? parseInt(appointments) : 0; // Initialize to 0 if not set
-            var totalAmount = parseFloat(sessionStorage.getItem('totalAmount')); // Assuming total amount is stored in sessionStorage
-            var deposit = totalAmount * 0.2; // Calculate deposit
+            // IndexedDB setup
+            let db;
+            const request = indexedDB.open('appointmentDB', 1);
 
-            // Increment appointments count and store it
-            appointments++;
-            sessionStorage.setItem('appointments', appointments);
+            request.onerror = (event) => {
+                console.error('Database error:', event.target.errorCode);
+            };
 
-            // Create a table row with the retrieved data
-            var tableRow = "<tr>" +
-                "<td>" + appointments + "</td>" + // Customer Nr
-                "<td>" + sessionStorage.getItem('username') + "</td>" + // Customer Name
-                "<td>" + sessionStorage.getItem('phoneNumber') + "</td>" + // Phone Nr
-                "<td>" + sessionStorage.getItem('appointmentTime') + "</td>" + // Date
-                "<td>" + sessionStorage.getItem('orderNo') + "</td>"; // Reference Nr
+            request.onsuccess = (event) => {
+                db = event.target.result;
+                displayAppointments();
+            };
 
-            // Append remaining cells to the table row
-            tableRow += "<td><input type='checkbox' class='serviceCheckbox'></td>" + // Paid checkbox
-                "<td class='remainingBalance'>" + totalAmount.toFixed(2) + "</td>" + // Remaining Balance initially set to total amount
-                "</tr>";
+            // Function to display appointments
+            function displayAppointments() {
+                const transaction = db.transaction(['appointments'], 'readonly');
+                const objectStore = transaction.objectStore('appointments');
 
-            // Append the table row to the table body
-            document.getElementById("bookingList").innerHTML += tableRow;
+                objectStore.openCursor().onsuccess = (event) => {
+                    const cursor = event.target.result;
+                    if (cursor) {
+                        const appointment = cursor.value;
+                        const deposit = 100; // Assuming a fixed deposit amount
 
-            // Add event listener to the Paid checkbox
-            var paidCheckboxes = document.querySelectorAll('.serviceCheckbox');
-            paidCheckboxes.forEach(function (checkbox) {
-                checkbox.addEventListener('change', function () {
-                    var remainingBalanceCell = this.parentElement.nextElementSibling;
-                    var remainingBalance = parseFloat(remainingBalanceCell.textContent);
-                    if (this.checked) {
-                        remainingBalance -= deposit; // Subtract deposit from remaining balance
-                    } else {
-                        remainingBalance += deposit; // Add deposit back to remaining balance
+                        // Create a table row with the appointment data
+                        const tableRow = document.createElement('tr');
+                        tableRow.innerHTML = `
+                            <td>${appointment.id}</td>
+                            <td>${appointment.username}</td>
+                            <td>${appointment.phoneNumber}</td>
+                            <td>${appointment.appointmentDate}</td>
+                            <td>${appointment.appointmentTime}</td>
+                            <td><input type='checkbox' class='serviceCheckbox'></td>
+                            <td class='remainingBalance'>${appointment.deposit.toFixed(2)}</td>
+                        `;
+
+                        document.getElementById('bookingList').appendChild(tableRow);
+
+                        // Add event listener to the Paid checkbox
+                        const paidCheckbox = tableRow.querySelector('.serviceCheckbox');
+                        paidCheckbox.addEventListener('change', function () {
+                            const remainingBalanceCell = this.parentElement.nextElementSibling;
+                            let remainingBalance = parseFloat(remainingBalanceCell.textContent);
+                            if (this.checked) {
+                                remainingBalance -= deposit; // Subtract deposit from remaining balance
+                            } else {
+                                remainingBalance += deposit; // Add deposit back to remaining balance
+                            }
+                            remainingBalanceCell.innerText = remainingBalance.toFixed(2);
+                        });
+
+                        cursor.continue();
                     }
-                    remainingBalanceCell.innerText = remainingBalance.toFixed(2);
-                });
-            });
+                };
+            }
         });
     </script>
 </body>
