@@ -148,6 +148,12 @@
     </div>
 
     <script>
+        // Set the minimum date to today's date
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('appointmentDate').setAttribute('min', today);
+        });
+
         // Calendar popup functionality
         const appointmentDateInput = document.getElementById('appointmentDate');
         const calendarPopup = document.getElementById('calendarPopup');
@@ -242,3 +248,4 @@
     </script>
 </body>
 </html>
+
